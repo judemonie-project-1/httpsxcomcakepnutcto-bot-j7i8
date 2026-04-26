@@ -1,3 +1,4 @@
+// build:1777212563131
 'use strict';
 var Telegraf=require('telegraf').Telegraf;
 var express=require('express');
@@ -12,7 +13,7 @@ var _groqIdx=0;
 function nextGroqKey(){if(!_groqPool.length)return'';var k=_groqPool[_groqIdx%_groqPool.length];_groqIdx++;return k;}
 var WEBHOOK_URL=(process.env.WEBHOOK_URL||'').trim();
 var PORT=process.env.PORT||3000;
-var TICKER='$HTTPS://X.COM/CAKEPNUT_CTO';
+var TICKER='$CAKEPNUT';
 var CA='0xD60706E7C7179597FA0B1C81deb4AA2554D38E61';
 var TWITTER='https://x.com/Cakepnut_CTO';
 var TG='https://t.me/CAKEPNUT';
@@ -27,7 +28,7 @@ var SIL_DELAY=3600000;
 function loadState(){try{var s=JSON.parse(fs.readFileSync(_SF,'utf8'));caUnlocked=!!s.u;groupChatId=s.g||null;}catch(_){}}
 function saveState(){try{fs.writeFileSync(_SF,JSON.stringify({u:caUnlocked,g:groupChatId}));}catch(_){}}
 loadState();
-var _IMG1=path.join(__dirname,'httpsxcomcakepnutcto.jpg');
+var _IMG1=path.join(__dirname,'cakepnut.jpg');
 var _IMG2=path.join(__dirname,'siren.jpg');
 var IMG=fs.existsSync(_IMG1)?_IMG1:(fs.existsSync(_IMG2)?_IMG2:_IMG1);
 var IMG_BUF=null;try{if(fs.existsSync(IMG)){IMG_BUF=fs.readFileSync(IMG);console.log('Image loaded:',path.basename(IMG));}else{console.log('No image file found:',IMG);}}catch(e){console.log('Image error:',e.message);}
@@ -44,10 +45,10 @@ async function applyStrike(ctx,uid,reason){var s=getStrike(uid);try{await ctx.de
 async function checkSpam(ctx,uid){var n=Date.now(),t=spamTracker.get(uid)||{c:0,s:n};if(n-t.s>60000)t={c:0,s:n};t.c++;spamTracker.set(uid,t);if(t.c>5){try{await ctx.telegram.restrictChatMember(ctx.chat.id,uid,{permissions:{can_send_messages:false},until_date:Math.floor(Date.now()/1000)+300});}catch(_){}var m=await ctx.reply('Muted 5 min for spam.');autoDel(ctx.chat.id,m.message_id,15000);return true;}return false;}
 var FUD=['rug','rugpull','scam','ponzi','honeypot','fuck','bitch','bastard','asshole','cunt','exit scam','dev ran','abandoned'];
 function hasFud(t){var l=t.toLowerCase();return FUD.some(function(w){return l.includes(w);});}
-var NOT_LIVE=['$HTTPS://X.COM/CAKEPNUT_CTO hasn\u2019t launched yet. CA coming soon.','Not yet. Stay ready.','CA drops soon. Hold tight.'];
-var CTO_REPLIES=['$HTTPS://X.COM/CAKEPNUT_CTO is a CTO. Original dev gone. Community owns and runs this completely. No dev to rug.','CTO project. Dev walked away. Community stepped up and owns $HTTPS://X.COM/CAKEPNUT_CTO now. That is the strength.','No dev here. $HTTPS://X.COM/CAKEPNUT_CTO is 100% community-owned. Original dev left. Community drives this forward.'];
+var NOT_LIVE=['$CAKEPNUT hasn\u2019t launched yet. CA coming soon.','Not yet. Stay ready.','CA drops soon. Hold tight.'];
+var CTO_REPLIES=['$CAKEPNUT is a CTO. Original dev gone. Community owns and runs this completely. No dev to rug.','CTO project. Dev walked away. Community stepped up and owns $CAKEPNUT now. That is the strength.','No dev here. $CAKEPNUT is 100% community-owned. Original dev left. Community drives this forward.'];
 function sysPrompt(){
-  return 'You are the community bot for $HTTPS://X.COM/CAKEPNUT_CTO, a BNB Smart Chain (BSC) meme token.\nToken: $HTTPS://X.COM/CAKEPNUT_CTO | Chain: BNB Smart Chain (BSC)\nSupply: N/A\nTax: 0% buy / 0% sell\nContract: NOT RENOUNCED | LP: BURNED\nDEV: CTO. Original dev gone. Community owns $HTTPS://X.COM/CAKEPNUT_CTO completely. Say this clearly when asked.'+(TWITTER?'\nTwitter: '+TWITTER:'')+'\nNarrative: '+"🍰🥜 CakePnut_CTO is here to sweeten the space 🚀\n\nFrom a simple idea to a buzzing community movement, CakePnut blends the fun of memes with real on-chain energy. Small cake… but BIG potential. This is where nutty vibes meet serious growth."+'\nPersonality: Warm, inclusive, friendly. Make everyone feel welcome. Genuine and supportive.\nRULES: 2-4 lines max. Natural and professional. Never share TG group link. Never repeat reply. If hype/casual/no question: reply IGNORE exactly.';
+  return 'You are the community bot for $CAKEPNUT, a BNB Smart Chain (BSC) meme token.\nToken: $CAKEPNUT | Chain: BNB Smart Chain (BSC)\nSupply: N/A\nTax: 0% buy / 0% sell\nContract: NOT RENOUNCED | LP: BURNED\nDEV: CTO. Original dev gone. Community owns $CAKEPNUT completely. Say this clearly when asked.'+(TWITTER?'\nTwitter: '+TWITTER:'')+'\nNarrative: '+"🍰🥜 CakePnut_CTO is here to sweeten the space 🚀\n\nFrom a simple idea to a buzzing community movement, CakePnut blends the fun of memes with real on-chain energy. Small cake… but BIG potential. This is where nutty vibes meet serious growth."+'\nPersonality: Warm, inclusive, friendly. Make everyone feel welcome. Genuine and supportive.\nRULES: 2-4 lines max. Natural and professional. Never share TG group link. Never repeat reply. If hype/casual/no question: reply IGNORE exactly.';
 }
 async function ask(msg){
   if(!_groqPool.length)throw new Error('No AI key configured. Add one with /addgroq in factory.');
@@ -62,7 +63,7 @@ async function ask(msg){
   throw lastErr||new Error('All Groq keys failed');
 }
 async function smartAsk(msg){var r=await ask(msg);if(lastReplies.includes(r))r=await ask(msg+' Give a completely different response.');lastReplies.push(r);if(lastReplies.length>12)lastReplies.shift();return r;}
-var SIL_ANG=['2-3 lines. Why hold $HTTPS://X.COM/CAKEPNUT_CTO right now.','2-3 lines. $HTTPS://X.COM/CAKEPNUT_CTO fundamentals: renounced, LP locked.','2-3 lines. Being early to $HTTPS://X.COM/CAKEPNUT_CTO.','2-3 lines. $HTTPS://X.COM/CAKEPNUT_CTO community is building.','2-3 lines. The move in $HTTPS://X.COM/CAKEPNUT_CTO is still early.'];
+var SIL_ANG=['2-3 lines. Why hold $CAKEPNUT right now.','2-3 lines. $CAKEPNUT fundamentals: renounced, LP locked.','2-3 lines. Being early to $CAKEPNUT.','2-3 lines. $CAKEPNUT community is building.','2-3 lines. The move in $CAKEPNUT is still early.'];
 var silIdx=0;
 async function fireSilence(){if(!groupChatId)return resetSil();
   try{
@@ -89,7 +90,7 @@ async function doShoutout(){
     var humans=admins.filter(function(a){return!a.user.is_bot;});
     var names=humans.map(function(a){return a.user.username?'@'+a.user.username:a.user.first_name;});
     if(!names.length){schedShout();return;}
-    var ppt='Write 1-2 warm genuine lines appreciating these $HTTPS://X.COM/CAKEPNUT_CTO admins for keeping the community alive: '+names.join(', ')+'. Be specific, sound human, tag them by name.';
+    var ppt='Write 1-2 warm genuine lines appreciating these $CAKEPNUT admins for keeping the community alive: '+names.join(', ')+'. Be specific, sound human, tag them by name.';
     var msg=await smartAsk(ppt);
     if(msg&&msg!=='IGNORE'&&msg.length>5){
       var sm=await bot.telegram.sendMessage(groupChatId,msg);
@@ -112,19 +113,19 @@ function schedShout(){
   console.log('Next shoutout in',Math.round(wait/60000),'min');
 }
 bot.command('shoutout',async function(ctx){var admin=await isAdmin(ctx,ctx.from.id);if(!admin)return;var arg=(ctx.message.text||'').split(' ')[1]||'';if(arg==='on'){SHOUTOUT_ON=true;schedShout();return ctx.reply('\u2705 Admin shoutouts enabled. Fires 2-4x daily.');}if(arg==='off'){SHOUTOUT_ON=false;if(shoutTimer)clearTimeout(shoutTimer);return ctx.reply('\u274C Admin shoutouts disabled.');}if(arg==='now'){await doShoutout();return;}return ctx.reply('Usage: /shoutout on / off / now');});
-bot.command('ca',async function(ctx){if(!caUnlocked)return ctx.reply(NOT_LIVE[Math.floor(Math.random()*NOT_LIVE.length)]);await sendWithTracker(caMsg,ctx.chat.id,'$HTTPS://X.COM/CAKEPNUT_CTO Contract Address',{});return ctx.reply('<code>'+CA+'</code>',{parse_mode:'HTML'});});
-bot.command('x',async function(ctx){return sendWithTracker(xMsg,ctx.chat.id,'Follow $HTTPS://X.COM/CAKEPNUT_CTO on X',{reply_markup:{inline_keyboard:[[{text:'Follow on X',url:TWITTER}]]}});});
-bot.command('twitter',async function(ctx){return sendWithTracker(xMsg,ctx.chat.id,'Follow $HTTPS://X.COM/CAKEPNUT_CTO on X',{reply_markup:{inline_keyboard:[[{text:'Follow on X',url:TWITTER}]]}});});
+bot.command('ca',async function(ctx){if(!caUnlocked)return ctx.reply(NOT_LIVE[Math.floor(Math.random()*NOT_LIVE.length)]);await sendWithTracker(caMsg,ctx.chat.id,'$CAKEPNUT Contract Address',{});return ctx.reply('<code>'+CA+'</code>',{parse_mode:'HTML'});});
+bot.command('x',async function(ctx){return sendWithTracker(xMsg,ctx.chat.id,'Follow $CAKEPNUT on X',{reply_markup:{inline_keyboard:[[{text:'Follow on X',url:TWITTER}]]}});});
+bot.command('twitter',async function(ctx){return sendWithTracker(xMsg,ctx.chat.id,'Follow $CAKEPNUT on X',{reply_markup:{inline_keyboard:[[{text:'Follow on X',url:TWITTER}]]}});});
 bot.command('socials',function(ctx){return ctx.reply('<a href=\'https://dexscreener.com/bsc/0xD60706E7C7179597FA0B1C81deb4AA2554D38E61\'>Chart</a> | <a href=\'https://pancakeswap.finance/swap?outputCurrency=0xD60706E7C7179597FA0B1C81deb4AA2554D38E61\'>PancakeSwap</a>'+(TWITTER?' | <a href=\''+TWITTER+'\'>Twitter</a>':'')+(WEBSITE?' | <a href=\''+WEBSITE+'\'>Website</a>':''),{parse_mode:'HTML',disable_web_page_preview:true});});
 bot.command('links',function(ctx){return ctx.reply('<a href=\'https://dexscreener.com/bsc/0xD60706E7C7179597FA0B1C81deb4AA2554D38E61\'>Chart</a> | <a href=\'https://pancakeswap.finance/swap?outputCurrency=0xD60706E7C7179597FA0B1C81deb4AA2554D38E61\'>PancakeSwap</a>'+(TWITTER?' | <a href=\''+TWITTER+'\'>Twitter</a>':'')+(WEBSITE?' | <a href=\''+WEBSITE+'\'>Website</a>':''),{parse_mode:'HTML',disable_web_page_preview:true});});
-bot.command('info',function(ctx){return ctx.reply('<b>$HTTPS://X.COM/CAKEPNUT_CTO</b> \u2014 BNB Smart Chain (BSC)\n\nSupply: N/A\nTax: 0% buy / 0% sell\nContract: NOT RENOUNCED\nLP: BURNED'+(TWITTER?'\nTwitter: '+TWITTER:''),{parse_mode:'HTML',disable_web_page_preview:true});});
+bot.command('info',function(ctx){return ctx.reply('<b>$CAKEPNUT</b> \u2014 BNB Smart Chain (BSC)\n\nSupply: N/A\nTax: 0% buy / 0% sell\nContract: NOT RENOUNCED\nLP: BURNED'+(TWITTER?'\nTwitter: '+TWITTER:''),{parse_mode:'HTML',disable_web_page_preview:true});});
 bot.command('shill',async function(ctx){
   var shillMsgs=[
-    'Have you heard about $HTTPS://X.COM/CAKEPNUT_CTO?\n\n$HTTPS://X.COM/CAKEPNUT_CTO \u2014 community-owned on BSC.\nRenounced. LP BURNED. No dev games.\nThis is the quiet move. Load up.',
-    'Looking for a BSC token built by real people?\n\n$HTTPS://X.COM/CAKEPNUT_CTO \u2014 fully community-owned.\nRenounced contract. LP BURNED. Real narrative.\nGet in early \u261d',
-    'The move others will regret missing.\n\n$HTTPS://X.COM/CAKEPNUT_CTO on BSC \u2014 community takeover.\nRenounced. LP BURNED. No rug possible.\nLoad up before it runs.',
-    'What if the next gem was right here?\n\n$HTTPS://X.COM/CAKEPNUT_CTO \u2014 zero dev, 100% community.\nRenounced. LP BURNED. Low cap. Real conviction.',
-    'Don\u2019t sleep on $HTTPS://X.COM/CAKEPNUT_CTO.\nCommunity took over. Dev is gone. LP BURNED.\nThis is what conviction looks like. Load up.',
+    'Have you heard about $CAKEPNUT?\n\n$CAKEPNUT \u2014 community-owned on BSC.\nRenounced. LP BURNED. No dev games.\nThis is the quiet move. Load up.',
+    'Looking for a BSC token built by real people?\n\n$CAKEPNUT \u2014 fully community-owned.\nRenounced contract. LP BURNED. Real narrative.\nGet in early \u261d',
+    'The move others will regret missing.\n\n$CAKEPNUT on BSC \u2014 community takeover.\nRenounced. LP BURNED. No rug possible.\nLoad up before it runs.',
+    'What if the next gem was right here?\n\n$CAKEPNUT \u2014 zero dev, 100% community.\nRenounced. LP BURNED. Low cap. Real conviction.',
+    'Don\u2019t sleep on $CAKEPNUT.\nCommunity took over. Dev is gone. LP BURNED.\nThis is what conviction looks like. Load up.',
   ];
   var base=shillMsgs[Math.floor(Math.random()*shillMsgs.length)];
   var caLine=caUnlocked?'\n\nCA:\n'+CA:'\n\nCA dropping soon.';
@@ -172,9 +173,9 @@ bot.on('message',async function(ctx){
     var caW=['ca','contract address','contract','token address'];
     if(caW.some(function(w){return lower===w||lower.includes(w);})){
       if(!caUnlocked)return ctx.reply(NOT_LIVE[Math.floor(Math.random()*NOT_LIVE.length)]);
-      await sendWithTracker(caMsg,ctx.chat.id,'$HTTPS://X.COM/CAKEPNUT_CTO Contract Address',{});return ctx.reply('<code>'+CA+'</code>',{parse_mode:'HTML'});
+      await sendWithTracker(caMsg,ctx.chat.id,'$CAKEPNUT Contract Address',{});return ctx.reply('<code>'+CA+'</code>',{parse_mode:'HTML'});
     }
-    if(lower==='x'||lower==='twitter')return sendWithTracker(xMsg,ctx.chat.id,'Follow $HTTPS://X.COM/CAKEPNUT_CTO on X',{reply_markup:{inline_keyboard:[[{text:'Follow on X',url:TWITTER}]]}});
+    if(lower==='x'||lower==='twitter')return sendWithTracker(xMsg,ctx.chat.id,'Follow $CAKEPNUT on X',{reply_markup:{inline_keyboard:[[{text:'Follow on X',url:TWITTER}]]}});
     if(lower==='socials'||lower==='links')return ctx.reply('<a href=\'https://dexscreener.com/bsc/0xD60706E7C7179597FA0B1C81deb4AA2554D38E61\'> Chart</a> | <a href=\'https://pancakeswap.finance/swap?outputCurrency=0xD60706E7C7179597FA0B1C81deb4AA2554D38E61\'> PancakeSwap</a>'+(TWITTER?' | <a href=\''+TWITTER+'\'>Twitter</a>':''),{parse_mode:'HTML',disable_web_page_preview:true});
     return;
   }
@@ -188,9 +189,9 @@ bot.on('message',async function(ctx){
   var caWords=['ca','contract address','token address','where is the ca','give ca','show ca','drop ca','contract'];
   if(caWords.some(function(w){return lower2===w||lower2.includes(w);})){
     if(!caUnlocked)return ctx.reply(NOT_LIVE[Math.floor(Math.random()*NOT_LIVE.length)]);
-    await sendWithTracker(caMsg,ctx.chat.id,'$HTTPS://X.COM/CAKEPNUT_CTO Contract Address',{});return ctx.reply('<code>'+CA+'</code>',{parse_mode:'HTML'});
+    await sendWithTracker(caMsg,ctx.chat.id,'$CAKEPNUT Contract Address',{});return ctx.reply('<code>'+CA+'</code>',{parse_mode:'HTML'});
   }
-  if(lower2==='x'||lower2==='twitter'||lower2.includes('follow on'))return sendWithTracker(xMsg,ctx.chat.id,'Follow $HTTPS://X.COM/CAKEPNUT_CTO on X',{reply_markup:{inline_keyboard:[[{text:'Follow on X',url:TWITTER}]]}});
+  if(lower2==='x'||lower2==='twitter'||lower2.includes('follow on'))return sendWithTracker(xMsg,ctx.chat.id,'Follow $CAKEPNUT on X',{reply_markup:{inline_keyboard:[[{text:'Follow on X',url:TWITTER}]]}});
   if(lower2==='socials'||lower2==='links')return ctx.reply('<a href=\'https://dexscreener.com/bsc/0xD60706E7C7179597FA0B1C81deb4AA2554D38E61\'> Chart</a> | <a href=\'https://pancakeswap.finance/swap?outputCurrency=0xD60706E7C7179597FA0B1C81deb4AA2554D38E61\'> PancakeSwap</a>'+(TWITTER?' | <a href=\''+TWITTER+'\'>Twitter</a>':''),{parse_mode:'HTML',disable_web_page_preview:true});
   if(isPrivate){try{var gr=await smartAsk(chatHistory.join('\n'));if(gr&&gr!=='IGNORE')return ctx.reply(gr);}catch(_){}return;}
   if(RESPONSE_MODE==='focused'){if(text.indexOf('?')===-1)return;try{var gr2=await smartAsk(chatHistory.join('\n'));if(gr2&&gr2!=='IGNORE')return ctx.reply(gr2);}catch(_){}return;}
@@ -203,4 +204,4 @@ app.get('/health',function(req,res){res.end('OK');});
 async function regWH(){if(!WEBHOOK_URL)return;var url=WEBHOOK_URL+'/webhook';for(var i=0;i<5;i++){try{if(await bot.telegram.setWebhook(url)){console.log('Webhook:',url);return;}}catch(e){console.log('WH '+(i+1)+':',e.message);}await new Promise(function(r){setTimeout(r,3000);});}}
 process.on('uncaughtException',function(e){console.error(e.message);});
 process.on('unhandledRejection',function(e){console.error(e&&e.message);});
-app.listen(PORT,async function(){console.log('$HTTPS://X.COM/CAKEPNUT_CTO bot port '+PORT);try{await new Promise(function(r){setTimeout(r,2000);});}catch(_){}try{await regWH();}catch(e){console.log(e.message);}if(parseInt(SIL_DELAY||'0')>0)try{resetSil();}catch(_){}try{schedShout();}catch(_){}setInterval(function(){if(WEBHOOK_URL)try{fetch(WEBHOOK_URL+'/health').catch(function(){});}catch(_){}},4*60*1000);console.log('$HTTPS://X.COM/CAKEPNUT_CTO bot live');});
+app.listen(PORT,async function(){console.log('$CAKEPNUT bot port '+PORT);try{await new Promise(function(r){setTimeout(r,2000);});}catch(_){}try{await regWH();}catch(e){console.log(e.message);}if(parseInt(SIL_DELAY||'0')>0)try{resetSil();}catch(_){}try{schedShout();}catch(_){}setInterval(function(){if(WEBHOOK_URL)try{fetch(WEBHOOK_URL+'/health').catch(function(){});}catch(_){}},4*60*1000);console.log('$CAKEPNUT bot live');});
