@@ -1,4 +1,4 @@
-// build:1777242176879
+// build:1777243630656
 'use strict';
 var Telegraf=require('telegraf').Telegraf;
 var express=require('express');
@@ -48,7 +48,7 @@ function hasFud(t){var l=t.toLowerCase();return FUD.some(function(w){return l.in
 var NOT_LIVE=['$CAKEPNUT hasn\u2019t launched yet. CA coming soon.','Not yet. Stay ready.','CA drops soon. Hold tight.'];
 var CTO_REPLIES=['$CAKEPNUT is a CTO. Original dev gone. Community owns and runs this completely. No dev to rug.','CTO project. Dev walked away. Community stepped up and owns $CAKEPNUT now. That is the strength.','No dev here. $CAKEPNUT is 100% community-owned. Original dev left. Community drives this forward.'];
 function sysPrompt(){
-  return 'You are the community bot for $CAKEPNUT, a BNB Smart Chain (BSC) meme token.\nToken: $CAKEPNUT | Chain: BNB Smart Chain (BSC)\nSupply: N/A\nTax: 0% buy / 0% sell\nContract: NOT RENOUNCED | LP: BURNED\nDEV: CTO. Original dev gone. Community owns $CAKEPNUT completely. Say this clearly when asked.'+(TWITTER?'\nTwitter: '+TWITTER:'')+'\nNarrative: '+""+'\nPersonality: Warm, inclusive, friendly. Make everyone feel welcome. Genuine and supportive.\nRULES: 2-4 lines max. Natural and professional. Never share TG group link. Never repeat reply. If hype/casual/no question: reply IGNORE exactly.';
+  return 'You are the community bot for $CAKEPNUT, a BNB Smart Chain (BSC) meme token.\nToken: $CAKEPNUT | Chain: BNB Smart Chain (BSC)\nSupply: N/A\nTax: 0% buy / 0% sell\nContract: RENOUNCED | LP: BURNED\nDEV: CTO. Original dev gone. Community owns $CAKEPNUT completely. Say this clearly when asked.'+(TWITTER?'\nTwitter: '+TWITTER:'')+'\nNarrative: '+""+'\nPersonality: Warm, inclusive, friendly. Make everyone feel welcome. Genuine and supportive.\nRULES: 2-4 lines max. Natural and professional. Never share TG group link. Never repeat reply. If hype/casual/no question: reply IGNORE exactly.';
 }
 async function ask(msg){
   if(!_groqPool.length)throw new Error('No AI key configured. Add one with /addgroq in factory.');
@@ -118,7 +118,7 @@ bot.command('x',async function(ctx){return sendWithTracker(xMsg,ctx.chat.id,'Fol
 bot.command('twitter',async function(ctx){return sendWithTracker(xMsg,ctx.chat.id,'Follow $CAKEPNUT on X',{reply_markup:{inline_keyboard:[[{text:'Follow on X',url:TWITTER}]]}});});
 bot.command('socials',function(ctx){return ctx.reply('<a href=\'https://dexscreener.com/bsc/0xD60706E7C7179597FA0B1C81deb4AA2554D38E61\'>Chart</a> | <a href=\'https://pancakeswap.finance/swap?outputCurrency=0xD60706E7C7179597FA0B1C81deb4AA2554D38E61\'>PancakeSwap</a>'+(TWITTER?' | <a href=\''+TWITTER+'\'>Twitter</a>':'')+(WEBSITE?' | <a href=\''+WEBSITE+'\'>Website</a>':''),{parse_mode:'HTML',disable_web_page_preview:true});});
 bot.command('links',function(ctx){return ctx.reply('<a href=\'https://dexscreener.com/bsc/0xD60706E7C7179597FA0B1C81deb4AA2554D38E61\'>Chart</a> | <a href=\'https://pancakeswap.finance/swap?outputCurrency=0xD60706E7C7179597FA0B1C81deb4AA2554D38E61\'>PancakeSwap</a>'+(TWITTER?' | <a href=\''+TWITTER+'\'>Twitter</a>':'')+(WEBSITE?' | <a href=\''+WEBSITE+'\'>Website</a>':''),{parse_mode:'HTML',disable_web_page_preview:true});});
-bot.command('info',function(ctx){return ctx.reply('<b>$CAKEPNUT</b> \u2014 BNB Smart Chain (BSC)\n\nSupply: N/A\nTax: 0% buy / 0% sell\nContract: NOT RENOUNCED\nLP: BURNED'+(TWITTER?'\nTwitter: '+TWITTER:''),{parse_mode:'HTML',disable_web_page_preview:true});});
+bot.command('info',function(ctx){return ctx.reply('<b>$CAKEPNUT</b> \u2014 BNB Smart Chain (BSC)\n\nSupply: N/A\nTax: 0% buy / 0% sell\nContract: RENOUNCED\nLP: BURNED'+(TWITTER?'\nTwitter: '+TWITTER:''),{parse_mode:'HTML',disable_web_page_preview:true});});
 bot.command('shill',async function(ctx){
   var shillMsgs=[
     'Have you heard about $CAKEPNUT?\n\n$CAKEPNUT \u2014 community-owned on BSC.\nRenounced. LP BURNED. No dev games.\nThis is the quiet move. Load up.',
